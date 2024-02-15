@@ -1,18 +1,35 @@
+import { v2 as cloudinary } from "cloudinary";
+import fs from 'fs';
 import Photo from '../models/photoModel.js'; // model import edildi
 
-const createPhoto = async (req, res) => { // POST metoduna gore createPhoto islemini yaptirdi
+const createPhoto = async (req, res) => {
+    console.log(req.file);
+    const result = await cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+            use_filename: true,
+            folder: 'lenslight_tr',
+        }
+    );
+    console.log('result', result)
     try {
-        const photo = Photo.create(req.body); // req.body ile photo olusturuldu
-        res.status(201).json({ // 201 oluşturuldu 
-            succeded: true, // islem basarili
-            photo, // photo olusturuldu 
+        await Photo.create({
+            name: req.body.name,
+            description: req.body.description,
+            user: res.locals.user._id,
+            url: result.secure_url
         });
+
+        fs.unlinkSync(req.files.image.tempFilePath)
+
+        res.status(201).redirect('/users/dashboard');
     } catch (error) {
-        res.status(500).json({ // 201 oluşturuldu 
+        console.error(error);
+        res.status(500).json({
             succeded: false,
-            error
+            error,
         });
-    }// hata verdi
+    }
 };
 
 const getAllPhotos = async (req, res) => { // GET metoduna gore getAllPhotos islemini yaptirdi
@@ -28,6 +45,26 @@ const getAllPhotos = async (req, res) => { // GET metoduna gore getAllPhotos isl
             error
         });
     }
-}
-export { createPhoto, getAllPhotos }; // export edildi 
+};
+
+const getAPhotos = async (req, res) => { // GET metoduna gore getAllPhotos islemini yaptirdi
+    try {
+        const photo = await Photo.findById({ _id: req.params.id }).populate('user'); // photo tablosundan veri cekildi
+        res.status(200).render('photo', {
+            photo,
+            link: 'photos',
+        });
+    } catch (error) {
+        res.status(500).json({ // 500 oluşturuldu 
+            succeded: false,
+            error
+        });
+    }
+};
+
+
+
+
+
+export { createPhoto, getAPhotos, getAllPhotos }; // export edildi 
 

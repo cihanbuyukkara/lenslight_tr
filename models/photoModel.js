@@ -19,6 +19,18 @@ const photoSchema = new Schema({ // schema oluşturuldu
         type: Date, // tarih 
         default: Date.now, // tarih alanı varsayılan olarak bugün
     },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    url: {
+        type: String,
+        required: true
+    },
+    image_id: {
+        type: String
+    },
+
 });
 
 const Photo = mongoose.model('Photo', photoSchema); // model oluşturuldu 
