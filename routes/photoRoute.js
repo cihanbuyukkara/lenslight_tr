@@ -9,7 +9,10 @@ router
     .get(photoController.getAllPhotos); // GET metoduna gore getAllPhotos islemini yaptirdi
 
 router.route("/:id")
-    .get(photoController.getAPhotos);
+    .get(photoController.getAPhotos)
+    .delete(photoController.deletePhoto)
+    .put(photoController.updatePhoto)
+
 
 
 export default router;

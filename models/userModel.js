@@ -24,7 +24,18 @@ const userSchema = new Schema({ // schema oluşturuldu
         required: [true, "Password area is required"], // password alanı zorunlu  değer girilmezse hata verilecek 
         minlength: [4, "Password must be at least 4 characters"], // password alanı en az 6 karakter olmalı         
     },
+    followers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    followings: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+
 },
+
+
     {
         timestamps: true, // tarih alanı
     }
