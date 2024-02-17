@@ -1,9 +1,8 @@
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
-import Photo from '../models/photoModel.js'; // model import edildi
+import Photo from '../models/photoModel.js';
 
 const createPhoto = async (req, res) => {
-    console.log(req.file);
     const result = await cloudinary.uploader.upload(
         req.files.image.tempFilePath,
         {
@@ -11,21 +10,20 @@ const createPhoto = async (req, res) => {
             folder: 'lenslight_tr',
         }
     );
-    console.log('result', result)
+
     try {
         await Photo.create({
             name: req.body.name,
             description: req.body.description,
             user: res.locals.user._id,
             url: result.secure_url,
-            image_id: result.public_id
+            image_id: result.public_id,
         });
 
-        fs.unlinkSync(req.files.image.tempFilePath)
+        fs.unlinkSync(req.files.image.tempFilePath);
 
         res.status(201).redirect('/users/dashboard');
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             succeded: false,
             error,
@@ -33,35 +31,42 @@ const createPhoto = async (req, res) => {
     }
 };
 
-const getAllPhotos = async (req, res) => { // GET metoduna gore getAllPhotos islemini yaptirdi
+const getAllPhotos = async (req, res) => {
     try {
-        const photos = res.locals.user ? await Photo.find({ user: { $ne: res.locals.user._id } })
-
+        const photos = res.locals.user
+            ? await Photo.find({ user: { $ne: res.locals.user._id } })
             : await Photo.find({});
         res.status(200).render('photos', {
             photos,
             link: 'photos',
         });
-
     } catch (error) {
-        res.status(500).json({ // 500 oluşturuldu 
+        res.status(500).json({
             succeded: false,
-            error
+            error,
         });
     }
 };
 
-const getAPhotos = async (req, res) => { // GET metoduna gore getAllPhotos islemini yaptirdi
+const getAPhoto = async (req, res) => {
     try {
-        const photo = await Photo.findById({ _id: req.params.id }).populate('user'); // photo tablosundan veri cekildi
+        const photo = await Photo.findById({ _id: req.params.id }).populate('user');
+
+        let isOwner = false;
+
+        if (res.locals.user) {
+            isOwner = photo.user.equals(res.locals.user._id);
+        }
+
         res.status(200).render('photo', {
             photo,
             link: 'photos',
+            isOwner,
         });
     } catch (error) {
-        res.status(500).json({ // 500 oluşturuldu 
+        res.status(500).json({
             succeded: false,
-            error
+            error,
         });
     }
 };
@@ -73,14 +78,12 @@ const deletePhoto = async (req, res) => {
         const photoId = photo.image_id;
 
         await cloudinary.uploader.destroy(photoId);
-        await Photo.findOneAndDelete({ _id: req.params.id });
+        await Photo.findOneAndRemove({ _id: req.params.id });
 
         res.status(200).redirect('/users/dashboard');
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             succeded: false,
-
             error,
         });
     }
@@ -122,8 +125,4 @@ const updatePhoto = async (req, res) => {
     }
 };
 
-
-
-
-export { createPhoto, deletePhoto, getAPhotos, getAllPhotos, updatePhoto }; // export edildi 
-
+export { createPhoto, deletePhoto, getAPhoto, getAllPhotos, updatePhoto };

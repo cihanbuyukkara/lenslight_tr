@@ -1,18 +1,15 @@
-import express from 'express'; // express module import edildi 
+import express from 'express';
+import * as photoController from '../controllers/photoController.js';
 
-import * as photoController from '../controllers/photoController.js'; // photoController import edildi 
-const router = express.Router(); // router oluşturuldu
+const router = express.Router();
 
 router
-    .route('/') // GET metoduna yonlendirilir
+    .route('/')
     .post(photoController.createPhoto)
-    .get(photoController.getAllPhotos); // GET metoduna gore getAllPhotos islemini yaptirdi
+    .get(photoController.getAllPhotos);
 
-router.route("/:id")
-    .get(photoController.getAPhotos)
-    .delete(photoController.deletePhoto)
-    .put(photoController.updatePhoto)
-
-
+router.route('/:id').get(photoController.getAPhoto);
+router.route('/:id').delete(photoController.deletePhoto);
+router.route('/:id').put(photoController.updatePhoto);
 
 export default router;

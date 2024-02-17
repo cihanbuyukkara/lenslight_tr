@@ -1,38 +1,35 @@
-import mongoose from 'mongoose'; // mongoose module import edildi
+import mongoose from 'mongoose';
 
-const { Schema } = mongoose; // schema import edildi
+const { Schema } = mongoose;
 
-const photoSchema = new Schema({ // schema oluşturuldu
-    name: { // name alanı
-        type: String, // tipi
-        required: true,  // isim alanı zorunlu  
-        trim: true, // boşlukları temizler
-    },
-
-    description: {// description alanı
+const photoSchema = new Schema({
+    name: {
         type: String,
         required: true,
-        trim: true, // boşlukları temizler
+        trim: true,
     },
-
-    uploadedAt: { // uploadedAt alanı tarih formatinda olusturulmuştur.
-        type: Date, // tarih 
-        default: Date.now, // tarih alanı varsayılan olarak bugün
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    uploadedAt: {
+        type: Date,
+        default: Date.now,
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
     },
     url: {
         type: String,
-        required: true
+        required: true,
     },
     image_id: {
-        type: String
+        type: String,
     },
-
 });
 
-const Photo = mongoose.model('Photo', photoSchema); // model oluşturuldu 
+const Photo = mongoose.model('Photo', photoSchema);
 
-export default Photo; // export edildi
+export default Photo;

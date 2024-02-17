@@ -1,8 +1,8 @@
-import express from 'express'; // express module import edildi 
-import * as userController from '../controllers/userController.js'; // photoController import edildi 
-import * as authMiddleware from "../middlewares/authMiddleware.js";
+import express from 'express';
+import * as userController from '../controllers/userController.js';
+import * as authMiddleware from '../middlewares/authMiddleware.js';
 
-const router = express.Router(); // router oluşturuldu
+const router = express.Router();
 
 router.route('/register').post(userController.createUser);
 router.route('/login').post(userController.loginUser);
@@ -22,7 +22,4 @@ router
     .route('/:id/unfollow')
     .put(authMiddleware.authenticateToken, userController.unfollow);
 
-
-
-
-export default router; 
+export default router;
