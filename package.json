@@ -17,7 +17,7 @@
     "vercel": "^33.5.1"
   },
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "build": "node build-script.js"
   },
   "type": "module",
