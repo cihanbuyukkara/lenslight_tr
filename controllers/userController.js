@@ -1,22 +1,38 @@
 import bcrypt from "bcrypt"; // bcrypt module import edildi 
+import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import Photo from '../models/photoModel.js';
 import User from '../models/userModel.js'; // model import edildi
 
-const createUser = async (req, res) => { // POST metoduna gore createPhoto islemini yaptirdi
-
+const createUser = async (req, res) => {
     try {
+        // Kullanıcı bilgilerini al
+        const { username, email, password } = req.body;
 
-        const user = await User.create(req.body)
+        // Fotoğraf bilgisini al
+        const { profilePhoto } = req.files;
 
+        const cloudinaryResult = await cloudinary.uploader.upload(req.files.profilePhoto.tempFilePath, {
+            use_filename: true,
+            folder: 'lenslight_tr',
+        });
+        console.log('cloudinaryResult', cloudinaryResult);
 
-        res.status(201).json({ user: user._id })
+        // Kullanıcı oluştur
+        const user = await User.create({
+            username,
+            email,
+            password,
+            profilePhoto: cloudinaryResult.secure_url,
+        });
+        fs.unlinkSync(req.files.profilePhoto.tempFilePath,);
+
+        res.status(201).json({ user: user._id });
     } catch (error) {
-
         console.log("Error", error);
 
         let errors2 = {};
-
 
         if (error.code === 11000) {
             errors2.email = "The Email is already registered";
@@ -28,9 +44,7 @@ const createUser = async (req, res) => { // POST metoduna gore createPhoto islem
         }
         console.log("errors2:::", errors2);
         res.status(400).json(errors2);
-
     }
-
 };
 
 const loginUser = async (req, res) => {

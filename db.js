@@ -1,5 +1,5 @@
 
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; // mongoose module import edildi
 
 const conn = () => {
     mongoose.connect(process.env.DB_URI, {

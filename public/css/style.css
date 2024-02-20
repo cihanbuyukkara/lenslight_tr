@@ -690,7 +690,10 @@ ul.email li i {
     padding-bottom: 90px;
     margin-top: 90px;
 }
-
+.renkDegisenResim:hover {
+    filter: brightness(90%); /* Rengi değiştirmek için bir örnek filtre */
+    transition: filter 0.3s ease; /* Geçiş efekti eklemek için */
+}
 
 .about_img figure {
     margin: 0;

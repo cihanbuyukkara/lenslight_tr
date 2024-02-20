@@ -23,6 +23,10 @@ const userSchema = new Schema(
             required: [true, 'Password area is required'],
             minLength: [4, 'At least 4 characters'],
         },
+        profilePhoto: {
+            type: String,
+            required: [true, 'Photo area is required'],
+        },
         followers: [
             {
                 type: Schema.Types.ObjectId,

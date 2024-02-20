@@ -23,10 +23,12 @@
                      </div>
                   </div>
                   <div class="col-md-8 offset-md-2">
-                     <form id="request" class="main_form" action="users/register" method="post">
+                     <form id="request" class="main_form" action="users/register" method="post"
+                        enctype="multipart/form-data">
                         <div class="row">
                            <div class="col-md-12">
-                              <input class="form_control" placeholder="Username" type="text" name="username">
+                              <input class="form_control" placeholder="Username" type="text" name="username"
+                                 enctype="multipart/form-data">
                            </div>
                            <div class="col-md-12">
                               <div style="display: none;" class="alert alert-danger" id="username"></div>
@@ -44,77 +46,77 @@
                               <div style="display: none;" class="alert alert-danger" id="password">pass</div>
                            </div>
                            <div class="col-md-12">
-                              <div class="group_form">
-                                 <button class="send_btn">Register</button>
-                              </div>
+                              <input class="form_control-file" placeholder="Profile Photo" type="file"
+                                 name="profilePhoto">
+                           </div>
+
+                        </div>
+                        <div class="col-md-12">
+                           <div class="group_form">
+                              <button class="send_btn">Register</button>
                            </div>
                         </div>
-                     </form>
                   </div>
+                  </form>
                </div>
             </div>
          </div>
+         </div>
 
          <script>
-            const form = document.querySelector('form')
-            const emailError = document.querySelector('#email')
-            const passwordError = document.querySelector('#password')
-            const usernameError = document.querySelector('#username')
+            const form = document.querySelector('form');
+            const emailError = document.querySelector('#email');
+            const passwordError = document.querySelector('#password');
+            const usernameError = document.querySelector('#username');
 
-            form.addEventListener("submit", async (e) => {
+            form.addEventListener('submit', async (e) => {
                e.preventDefault();
 
-               emailError.textContent = "";
-               passwordError.textContent = "";
-               usernameError.textContent = "";
-               emailError.style.display = "none"
-               passwordError.style.display = "none"
-               usernameError.style.display = "none"
+               emailError.textContent = '';
+               passwordError.textContent = '';
+               usernameError.textContent = '';
+               emailError.style.display = 'none';
+               passwordError.style.display = 'none';
+               usernameError.style.display = 'none';
 
-               const email = form.email.value
-               const password = form.password.value
-               const username = form.username.value
+               const formData = new FormData(form);
 
                try {
                   const res = await fetch('users/register', {
-                     method: "POST",
-                     body: JSON.stringify({ email, password, username }),
-                     headers: { "Content-Type": "application/json" }
-                  })
+                     method: 'POST',
+                     body: formData,
+                  });
 
                   const data = await res.json();
 
-                  console.log("DATA", data)
+                  console.log('DATA', data);
 
                   if (data) {
-
                      if (data.email) {
-                        emailError.textContent = data.email
-                        emailError.style.display = "block"
+                        emailError.textContent = data.email;
+                        emailError.style.display = 'block';
                      }
 
                      if (data.password) {
-                        passwordError.textContent = data.password
-                        passwordError.style.display = "block"
+                        passwordError.textContent = data.password;
+                        passwordError.style.display = 'block';
                      }
 
                      if (data.username) {
-                        usernameError.textContent = data.username
-                        usernameError.style.display = "block"
+                        usernameError.textContent = data.username;
+                        usernameError.style.display = 'block';
                      }
-
-
                   }
 
                   if (data.user) {
-                     location.assign("/login")
+                     location.assign('/login');
                   }
-
                } catch (err) {
-                  console.log("ERR::", err)
+                  console.log('ERR::', err);
                }
-            })
+            });
          </script>
+
          <!-- end contact -->
          <!-- end footer -->
          <%- include("partials/_footer.ejs")%>

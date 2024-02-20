@@ -1,9 +1,9 @@
-import { v2 as cloudinary } from 'cloudinary';
-import cookieParser from 'cookie-parser';
+import { v2 as cloudinary } from 'cloudinary'; // cloudinary module import edildi
+import cookieParser from 'cookie-parser'; // cookie-parser module import edildi
 import dotenv from 'dotenv'; // dotenv module import edildi
 import express from 'express'; // express module import edildi
-import fileUpload from 'express-fileupload';
-import methodOverride from 'method-override';
+import fileUpload from 'express-fileupload'; // fileUpload module import edildi
+import methodOverride from 'method-override'; // methodOverride module import edildi
 import conn from './db.js'; // db.js import edildi 
 import { checkUser } from './middlewares/authMiddleware.js';
 import pageRoute from './routes/pageRoute.js'; // pageRoute.js import edildi
